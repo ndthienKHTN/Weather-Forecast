@@ -16,6 +16,13 @@ class WeatherResponse {
       forecast: Forecast.fromJson(json['forecast']),
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'location': location.toJson(),
+      'current': current.toJson(),
+      'forecast': forecast.toJson(),
+    };
+  }
 }
 
 class Location {
@@ -29,6 +36,12 @@ class Location {
       name: json['name'],
       localtime: json['localtime'],
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'localtime': localtime,
+    };
   }
 }
 
@@ -53,6 +66,14 @@ class Current {
       humidity: json['humidity'],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'temp_c': tempC,
+      'condition': condition.toJson(),
+      'wind_kph': windKph,
+      'humidity': humidity,
+    };
+  }
 }
 
 class Forecast {
@@ -67,6 +88,11 @@ class Forecast {
           .toList(),
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'forecastday': forecastday.map((day) => day.toJson()).toList(),
+    };
+  }
 }
 
 class ForecastDay {
@@ -80,6 +106,12 @@ class ForecastDay {
       date: json['date'],
       day: Day.fromJson(json['day']),
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'day': day.toJson(),
+    };
   }
 }
 
@@ -104,18 +136,40 @@ class Day {
       condition: Condition.fromJson(json['condition']),
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'avgtemp_c': avgtempC,
+      'maxwind_kph': maxwindKph,
+      'avghumidity': avghumidity,
+      'condition': condition.toJson(),
+    };
+  }
 }
 
 class Condition {
   final String text;
-  final String icon;
+  String icon;
 
   Condition({required this.text, required this.icon});
 
   factory Condition.fromJson(Map<String, dynamic> json) {
+    var iconUrl = json['icon'] as String;
+    if (iconUrl.startsWith('https:https:')) {
+      iconUrl = iconUrl.replaceFirst('https:https:', 'https:');
+    } else if (!iconUrl.startsWith('https:')) {
+      iconUrl = 'https:$iconUrl';
+    }
+
     return Condition(
       text: json['text'],
-      icon: 'https:${json['icon']}',
+      icon: iconUrl,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'icon': icon,
+    };
   }
 }

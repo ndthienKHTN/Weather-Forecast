@@ -42,8 +42,11 @@ dependencies:
   firebase_core: ^2.27.1
   firebase_auth: ^4.17.9
   cloud_firestore: ^4.15.9
-  firebase_dynamic_links: ^5.5.7
-  connectivity_plus: ^5.0.2
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  logger: ^2.5.0
+  localstorage: ^5.0.0
+  shared_preferences: ^2.3.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

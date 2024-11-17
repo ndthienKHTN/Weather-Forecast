@@ -13,7 +13,6 @@ class SearchHistory extends StatelessWidget {
         if (provider.searchHistory.isEmpty) {
           return const SizedBox.shrink();
         }
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -15,7 +15,7 @@ class CurrentWeather extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.blue[400],
+        color: Colors.blue[500],
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -43,15 +43,15 @@ class CurrentWeather extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'Nhiệt độ: ${weatherData.current.tempC}°C',
+            'Temperature: ${weatherData.current.tempC}°C',
             style: const TextStyle(color: Colors.white),
           ),
           Text(
-            'Gió: ${weatherData.current.windKph} KPH',
+            'Wind: ${weatherData.current.windKph} KPH',
             style: const TextStyle(color: Colors.white),
           ),
           Text(
-            'Độ ẩm: ${weatherData.current.humidity}%',
+            'Humidity: ${weatherData.current.humidity}%',
             style: const TextStyle(color: Colors.white),
           ),
         ],

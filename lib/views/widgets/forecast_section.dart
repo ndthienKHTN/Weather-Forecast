@@ -43,7 +43,7 @@ class ForecastSection extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey,
+        color: Colors.grey[600],
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -70,15 +70,15 @@ class ForecastSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Nhiệt độ: ${day.day.avgtempC}°C',
+                  'Temperature: ${day.day.avgtempC}°C',
                   style: const TextStyle(color: Colors.white),
                 ),
                 Text(
-                  'Gió: ${day.day.maxwindKph} KPH',
+                  'Wind: ${day.day.maxwindKph} KPH',
                   style: const TextStyle(color: Colors.white),
                 ),
                 Text(
-                  'Độ ẩm: ${day.day.avghumidity}%',
+                  'Humidity: ${day.day.avghumidity}%',
                   style: const TextStyle(color: Colors.white),
                 ),
               ],
@@ -104,7 +104,7 @@ class ForecastSection extends StatelessWidget {
                 ? null
                 : () => weatherProvider.loadMoreDays(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue[300],
+              backgroundColor: Colors.blue[500],
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -125,7 +125,7 @@ class ForecastSection extends StatelessWidget {
                       Icon(Icons.add, color: Colors.white),
                       SizedBox(width: 8),
                       Text(
-                        'Xem thêm 4 ngày tiếp theo',
+                        'Load more 4 days',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],

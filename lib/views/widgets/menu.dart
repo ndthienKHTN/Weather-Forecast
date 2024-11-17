@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_forecast/viewmodels/weather_provider.dart';
+import 'package:weather_forecast/views/widgets/subscription_form.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -52,6 +53,59 @@ class AppDrawer extends StatelessWidget {
                   ],
                 ),
               ),
+              // Trang chủ
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Trang chủ'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              // Thêm nút đăng ký thông báo
+              ListTile(
+                leading: const Icon(Icons.notifications),
+                title: const Text('Đăng ký thông báo'),
+                onTap: () {
+                  Navigator.pop(context); // Đóng drawer trước
+                  SubscriptionForm.show(
+                    context,
+                    weatherProvider.weatherData?.location.name ?? 'Ho Chi Minh',
+                  );
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.location_city),
+                title: const Text('Thành phố mặc định'),
+                subtitle: const Text('Ho Chi Minh City'),
+                onTap: () {
+                  weatherProvider.initializeDefaultData();
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.info),
+                title: const Text('Thông tin'),
+                onTap: () {
+                  Navigator.pop(context);
+                  showAboutDialog(
+                    context: context,
+                    applicationName: 'Weather Forecast',
+                    applicationVersion: '1.0.0',
+                    applicationIcon: const Icon(
+                      Icons.wb_sunny,
+                      size: 50,
+                      color: Colors.orange,
+                    ),
+                    children: const [
+                      Text('Ứng dụng dự báo thời tiết'),
+                      SizedBox(height: 10),
+                      Text('Powered by WeatherAPI.com'),
+                    ],
+                  );
+                },
+              ),
+              const Divider(),
               // Lịch sử tìm kiếm
               if (weatherProvider.searchHistory.isNotEmpty) ...[
                 const Padding(
@@ -76,47 +130,6 @@ class AppDrawer extends StatelessWidget {
                       },
                     )),
               ],
-              const Divider(),
-              // Các menu item khác
-              ListTile(
-                leading: const Icon(Icons.home),
-                title: const Text('Trang chủ'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.location_city),
-                title: const Text('Thành phố mặc định'),
-                subtitle: const Text('Vietnam'),
-                onTap: () {
-                  weatherProvider.initializeDefaultData();
-                  Navigator.pop(context);
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.info),
-                title: const Text('Thông tin'),
-                onTap: () {
-                  Navigator.pop(context);
-                  showAboutDialog(
-                    context: context,
-                    applicationName: 'Weather Forecast',
-                    applicationVersion: '1.0.0',
-                    applicationIcon: const Icon(
-                      Icons.wb_sunny,
-                      size: 50,
-                      color: Colors.orange,
-                    ),
-                    children: const [
-                      Text('Ứng dụng dự báo thời tiết'),
-                      SizedBox(height: 10),
-                      Text('Powered by WeatherAPI.com'),
-                    ],
-                  );
-                },
-              ),
             ],
           );
         },

@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[400],
+        backgroundColor: Colors.blue[500],
         elevation: 0,
         title: const Text(
           'Weather Dashboard',
@@ -38,11 +38,7 @@ class _HomeViewState extends State<HomeView> {
       drawer: const AppDrawer(),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blue[400]!, Colors.blue[50]!],
-          ),
+          color: Colors.blue[100],
         ),
         child: SafeArea(
           child: Column(

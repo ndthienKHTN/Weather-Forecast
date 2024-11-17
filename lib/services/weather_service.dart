@@ -4,7 +4,7 @@ import '../models/weather_response.dart';
 class WeatherService {
   final Dio _dio = Dio();
   final String _apiKey = '984ada41b98c49c9aa365847241411';
-  final String _baseUrl = 'http://api.weatherapi.com/v1';
+  final String _baseUrl = 'https://api.weatherapi.com/v1';
 
   Future<WeatherResponse> getWeather(String city, int days) async {
     try {
@@ -17,6 +17,10 @@ class WeatherService {
           'aqi': 'no',
           'alerts': 'no',
         },
+        options: Options(
+          followRedirects: true,
+          validateStatus: (status) => status! < 500,
+        ),
       );
       return WeatherResponse.fromJson(response.data);
     } catch (e) {

@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_forecast/utils/validators/search_validator.dart';
 import 'package:weather_forecast/viewmodels/weather_provider.dart';
 
-class SearchSection extends StatelessWidget {
+class SearchSection extends StatefulWidget {
   final TextEditingController controller;
 
   const SearchSection({
     super.key,
     required this.controller,
   });
+
+  @override
+  State<SearchSection> createState() => _SearchSectionState();
+}
+
+class _SearchSectionState extends State<SearchSection> {
+  // Thêm biến để quản lý trạng thái validate
+  String? _errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +29,7 @@ class SearchSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Nhập tên thành phố',
+              'Enter a city name',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -28,37 +37,99 @@ class SearchSection extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: controller,
+              controller: widget.controller,
               decoration: InputDecoration(
-                hintText: 'Ví dụ: Hanoi, Ho Chi Minh City',
+                hintText: 'eg: London, Ho Chi Minh City',
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
+                // Thêm errorText từ biến state
+                errorText: _errorText,
               ),
+              onChanged: (value) {
+                // Reset error text khi người dùng gõ
+                setState(() {
+                  _errorText = null;
+                });
+              },
             ),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  if (controller.text.isNotEmpty) {
+                  // Kiểm tra validate và cập nhật error text
+                  final errorMessage =
+                      SearchValidator.validateCityName(widget.controller.text);
+                  setState(() {
+                    _errorText = errorMessage;
+                  });
+
+                  if (errorMessage == null) {
                     context
                         .read<WeatherProvider>()
-                        .fetchWeatherData(controller.text);
+                        .fetchWeatherData(widget.controller.text);
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[300],
+                  backgroundColor: Colors.blue[500],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 child: const Text(
-                  'Tìm kiếm',
+                  'Search',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Row(
+              children: [
+                Expanded(
+                  child: Divider(
+                    thickness: 1, // Độ dày của đường kẻ
+                    color: Colors.grey, // Màu sắc của đường kẻ
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(
+                    'or',
+                    style: TextStyle(
+                      color: Colors.grey, // Màu chữ
+                      fontSize: 16, // Kích thước chữ
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Divider(
+                    thickness: 1,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<WeatherProvider>().fetchWeatherData('Vietnam');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[600],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                ),
+                child: const Text(
+                  'Use current location',
                   style: TextStyle(color: Colors.white),
                 ),
               ),

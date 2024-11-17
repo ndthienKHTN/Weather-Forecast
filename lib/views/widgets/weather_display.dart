@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_forecast/viewmodels/weather_provider.dart';
-import 'package:weather_forecast/views/subscription_form.dart';
 import 'current_weather.dart';
 import 'forecast_section.dart';
 
@@ -37,8 +36,6 @@ class WeatherDisplay extends StatelessWidget {
                         weatherProvider.weatherData!.forecast.forecastday,
                   ),
                   const SizedBox(height: 20),
-                  SubscriptionForm(
-                      city: weatherProvider.weatherData!.location.name),
                 ],
               ],
             ),

@@ -49,10 +49,14 @@ class FirebaseService {
       }
 
       // Xóa thông tin đăng ký khỏi Firestore
-      await _firestore
-          .collection('weather_subscribers')
-          .doc(querySnapshot.docs.first.id)
-          .delete();
+      String userId = querySnapshot.docs.first.id;
+      await _firestore.collection('weather_subscribers').doc(userId).delete();
+
+      // Xóa user từ Authentication nếu đang đăng nhập
+      User? currentUser = _auth.currentUser;
+      if (currentUser != null && currentUser.email == email) {
+        await currentUser.delete();
+      }
 
       return null; // Thành công
     } catch (e) {
@@ -70,5 +74,21 @@ class FirebaseService {
       Iterable.generate(
           length, (_) => chars.codeUnitAt(random.nextInt(chars.length))),
     );
+  }
+
+  // Kiểm tra email đã tồn tại
+  Future<bool> isEmailRegistered(String email) async {
+    try {
+      // Kiểm tra trong Firestore
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('weather_subscribers')
+          .where('email', isEqualTo: email)
+          .get();
+
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      // Nếu có lỗi, trả về false để an toàn
+      return false;
+    }
   }
 }

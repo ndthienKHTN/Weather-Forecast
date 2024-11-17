@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_forecast/storage/database_helper.dart';
 import '../models/weather_response.dart';
 import '../services/weather_service.dart';
 import '../models/weather_history.dart';
@@ -20,9 +21,14 @@ class WeatherProvider extends ChangeNotifier {
   bool get canLoadMore => _canLoadMore;
   List<WeatherHistory> get searchHistory => _searchHistory;
 
+  // Thêm constructor để khởi tạo dữ liệu
+  WeatherProvider() {
+    loadSearchHistory();
+  }
+
   // Cài đặt dữ liệu mặc định
   Future<void> initializeDefaultData() async {
-    await fetchWeatherData('Vietnam');
+    await fetchWeatherData('Ho Chi Minh');
   }
 
   Future<void> fetchWeatherData(String city) async {
@@ -49,31 +55,25 @@ class WeatherProvider extends ChangeNotifier {
     }
   }
 
-  void _addToHistory(String city, WeatherResponse data) {
-    // Kiểm tra xem đã có trong ngày chưa
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    // Xóa lịch sử cũ hơn 1 ngày
-    _searchHistory.removeWhere((item) {
-      final itemDate = DateTime(
-        item.searchTime.year,
-        item.searchTime.month,
-        item.searchTime.day,
-      );
-      return itemDate.isBefore(today);
-    });
-
-    // Thêm vào lịch sử
-    _searchHistory.insert(
-        0,
-        WeatherHistory(
-          city: city,
-          searchTime: now,
-          weatherData: data,
-        ));
-
+  Future<void> loadSearchHistory() async {
+    _searchHistory.clear();
+    _searchHistory.addAll(await DatabaseHelper.instance.getHistoryForToday());
     notifyListeners();
+  }
+
+  void _addToHistory(String city, WeatherResponse data) async {
+    final history = WeatherHistory(
+      city: city,
+      searchTime: DateTime.now(),
+      weatherData: data,
+    );
+
+    // Lưu vào SQLite
+    await DatabaseHelper.instance.insertHistory(history);
+    // Xóa lịch sử cũ
+    await DatabaseHelper.instance.deleteOldHistory();
+    // Tải lại lịch sử
+    await loadSearchHistory();
   }
 
   void loadFromHistory(WeatherHistory history) {

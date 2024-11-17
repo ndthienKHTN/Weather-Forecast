@@ -40,6 +40,10 @@ class _SearchSectionState extends State<SearchSection> {
               controller: widget.controller,
               decoration: InputDecoration(
                 hintText: 'eg: London, Ho Chi Minh City',
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[400],
+                ),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
@@ -119,18 +123,23 @@ class _SearchSectionState extends State<SearchSection> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<WeatherProvider>().fetchWeatherData('Vietnam');
+                  context
+                      .read<WeatherProvider>()
+                      .fetchWeatherData('Ho Chi Minh');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[600],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 ),
-                child: const Text(
-                  'Use current location',
-                  style: TextStyle(color: Colors.white),
+                child: const Center(
+                  child: Text(
+                    'Use current location',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ),
